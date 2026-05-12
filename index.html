@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SEI — Sport Entertainment International</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-bg">
+    <div class="auth-bg-glow"></div>
+    <div class="auth-bg-glow2"></div>
+  </div>
+  <div class="auth-wrap">
+    <div class="auth-logo">S<span>E</span>I</div>
+    <div class="auth-tagline">Sport Entertainment International</div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="at-login" onclick="switchAuthTab('login')">Sign In</div>
+        <div class="auth-tab" id="at-signup" onclick="switchAuthTab('signup')">Create Account</div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="auth-login">
+        <div class="auth-field"><label>Email</label><input type="email" placeholder="your@email.com" id="login-email"></div>
+        <div class="auth-field"><label>Password</label><input type="password" placeholder="••••••••" id="login-pass"></div>
+        <button class="btn-auth" onclick="doLogin()">Sign In</button>
+        <div class="auth-alt">Forgot password? <span>Reset it</span></div>
+      </div>
+
+      <!-- SIGNUP -->
+      <div id="auth-signup" style="display:none">
+        <div class="auth-field"><label>Full Name</label><input type="text" placeholder="Your name" id="sig-name"></div>
+        <div class="auth-field"><label>Email</label><input type="email" placeholder="your@email.com" id="sig-email"></div>
+        <div class="auth-field"><label>Password</label><input type="password" placeholder="Choose a password" id="sig-pass"></div>
+        <div class="auth-field">
+          <label>Your Region</label>
+          <div class="auth-region-pick" id="auth-region-pick">
+            <div class="arp active" onclick="selectAuthRegion('za',this)"><span class="arp-flag">🇿🇦</span><span class="arp-name">South Africa</span></div>
+            <div class="arp" onclick="selectAuthRegion('ng',this)"><span class="arp-flag">🇳🇬</span><span class="arp-name">Nigeria</span></div>
+            <div class="arp" onclick="selectAuthRegion('gh',this)"><span class="arp-flag">🇬🇭</span><span class="arp-name">Ghana</span></div>
+            <div class="arp" onclick="selectAuthRegion('ke',this)"><span class="arp-flag">🇰🇪</span><span class="arp-name">Kenya</span></div>
+            <div class="arp" onclick="selectAuthRegion('eg',this)"><span class="arp-flag">🇪🇬</span><span class="arp-name">Egypt</span></div>
+            <div class="arp" onclick="selectAuthRegion('af',this)"><span class="arp-flag">🌍</span><span class="arp-name">Pan-Africa</span></div>
+          </div>
+        </div>
+        <button class="btn-auth" onclick="doSignup()">Create Account</button>
+      </div>
+    </div>
+    <div class="auth-skip" onclick="skipAuth()">Continue as guest →</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     MAIN APP
+════════════════════════════════════ -->
+<div id="app" style="display:none">
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo" onclick="showPage('home')">S<span class="logo-e">E</span>I<span class="logo-sub">Africa</span></div>
+    <div class="nav-links">
+      <div class="nav-link active" id="nl-home" onclick="showPage('home')">Home</div>
+      <div class="nav-link" id="nl-merch" onclick="showPage('merch')">Merch</div>
+      <div class="nav-link" id="nl-pricing" onclick="showPage('pricing')">Plans</div>
+      <div class="nav-link" id="nl-profile" onclick="showPage('profile')">Profile</div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-icon-btn" onclick="openSearch()">🔍</div>
+      <div style="position:relative" id="region-wrap">
+        <div class="region-btn" onclick="toggleRegionDD()" id="region-btn">
+          <span id="rg-flag">🇿🇦</span>
+          <span id="rg-label">South Africa</span>
+          <span class="region-chevron">▾</span>
+        </div>
+        <div class="region-dd" id="region-dd">
+          <div class="rdd-label">Africa</div>
+          <div class="rdd-item active" id="rdi-za" onclick="setRegion('za')"><span class="rdd-flag">🇿🇦</span><div class="rdd-info"><div class="rdd-name">South Africa</div><div class="rdd-detail">PSL · Springboks · Proteas</div></div><span class="rdd-check" id="rc-za">✓</span></div>
+          <div class="rdd-item" id="rdi-ng" onclick="setRegion('ng')"><span class="rdd-flag">🇳🇬</span><div class="rdd-info"><div class="rdd-name">Nigeria</div><div class="rdd-detail">NPFL · Super Eagles</div></div><span class="rdd-check" id="rc-ng" style="display:none">✓</span></div>
+          <div class="rdd-item" id="rdi-gh" onclick="setRegion('gh')"><span class="rdd-flag">🇬🇭</span><div class="rdd-info"><div class="rdd-name">Ghana</div><div class="rdd-detail">GPL · Black Stars</div></div><span class="rdd-check" id="rc-gh" style="display:none">✓</span></div>
+          <div class="rdd-item" id="rdi-ke" onclick="setRegion('ke')"><span class="rdd-flag">🇰🇪</span><div class="rdd-info"><div class="rdd-name">Kenya</div><div class="rdd-detail">KPL · Harambee Stars</div></div><span class="rdd-check" id="rc-ke" style="display:none">✓</span></div>
+          <div class="rdd-item" id="rdi-eg" onclick="setRegion('eg')"><span class="rdd-flag">🇪🇬</span><div class="rdd-info"><div class="rdd-name">Egypt</div><div class="rdd-detail">Egyptian Premier League</div></div><span class="rdd-check" id="rc-eg" style="display:none">✓</span></div>
+          <div class="rdd-item" id="rdi-af" onclick="setRegion('af')"><span class="rdd-flag">🌍</span><div class="rdd-info"><div class="rdd-name">Pan-Africa</div><div class="rdd-detail">All African competitions</div></div><span class="rdd-check" id="rc-af" style="display:none">✓</span></div>
+          <div class="rdd-div"></div>
+          <div class="rdd-label">Global</div>
+          <div class="rdd-item" id="rdi-gl" onclick="setRegion('gl')"><span class="rdd-flag">🌐</span><div class="rdd-info"><div class="rdd-name">Global</div><div class="rdd-detail">All worldwide leagues</div></div><span class="rdd-check" id="rc-gl" style="display:none">✓</span></div>
+        </div>
+      </div>
+      <div class="plan-badge" id="nav-plan-badge">Free</div>
+      <button class="btn-up" onclick="showPage('pricing')">Upgrade</button>
+      <div class="avatar-btn" onclick="showPage('profile')" id="nav-avatar">JD</div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ══ HOME ══ -->
+    <div id="page-home" class="page active">
+      <div class="top-banner">
+        <div class="tb-region"><span id="tb-flag">🇿🇦</span><span id="tb-rname">South Africa</span></div>
+        <div class="tb-dot"></div>
+        <span class="tb-live" id="tb-live">8 live</span>
+        <div class="tb-dot"></div>
+        <span style="font-size:10px">720p · <span style="color:var(--gold);cursor:pointer" onclick="showPage('pricing')">Upgrade for HD</span></span>
+        <div class="tb-right" id="tb-curr">ZAR</div>
+      </div>
+
+      <div class="hero">
+        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-pitch">
+          <svg viewBox="0 0 700 560" preserveAspectRatio="xMidYMid slice" fill="none">
+            <ellipse cx="420" cy="280" rx="340" ry="230" stroke="white" stroke-width="1"/>
+            <ellipse cx="420" cy="280" rx="270" ry="183" stroke="white" stroke-width=".7"/>
+            <ellipse cx="420" cy="280" rx="200" ry="136" stroke="white" stroke-width=".5"/>
+            <ellipse cx="420" cy="280" rx="130" ry="89" stroke="white" stroke-width=".4"/>
+            <line x1="80" y1="280" x2="760" y2="280" stroke="white" stroke-width=".4"/>
+            <line x1="420" y1="50" x2="420" y2="510" stroke="white" stroke-width=".4"/>
+            <rect x="328" y="230" width="184" height="100" stroke="white" stroke-width=".5"/>
+            <rect x="370" y="255" width="100" height="50" stroke="white" stroke-width=".4"/>
+            <circle cx="420" cy="280" r="22" stroke="white" stroke-width=".4"/>
+          </svg>
+        </div>
+        <div class="hero-glow"></div>
+        <div class="hero-fade"></div>
+        <div class="hero-content">
+          <div class="hero-rtag" id="hero-rtag">🇿🇦 South Africa · Featured</div>
+          <div class="live-pill"><div class="live-dot"></div><span id="hero-time">Live Now · 68'</span></div>
+          <div class="hero-title" id="hero-title">Sundowns<br>vs Pirates</div>
+          <div class="hero-meta" id="hero-meta">PSL · Matchday 28 · Loftus Versfeld, Pretoria</div>
+          <div class="hero-score"><span id="hs1">2</span><span class="sdiv">—</span><span id="hs2">0</span></div>
+          <div class="hero-acts">
+            <button class="btn-watch" onclick="openPlayer()">▶ Watch Live</button>
+            <button class="btn-ghost">+ Watchlist</button>
+            <button class="btn-ghost" onclick="showPage('merch')">Merch</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="view-tabs">
+        <div class="vt active" id="vt-africa" onclick="setView('africa')">🌍 Africa</div>
+        <div class="vt" id="vt-global" onclick="setView('global')">🌐 Global</div>
+      </div>
+
+      <div class="section">
+        <div class="sec-hd">
+          <div class="sec-title">Live Now</div>
+          <div class="sec-count" id="live-count">8</div>
+          <div class="see-all">All →</div>
+        </div>
+        <div class="hscroll" id="live-row"></div>
+      </div>
+
+      <div class="section" style="padding-top:0">
+        <div class="sec-hd">
+          <div class="sec-title">Browse</div>
+          <div class="see-all">All →</div>
+        </div>
+        <div class="cats" id="sport-cats"></div>
+        <div class="cgrid" id="cgrid"></div>
+      </div>
+
+      <div class="upsell">
+        <div class="ub-text">
+          <h3>Go PRO — Watch Everything in HD</h3>
+          <p>1080p & 4K streams, cast to your TV, no ads, offline downloads, and access to every region's full schedule.</p>
+          <div class="ub-feats">
+            <div class="ub-feat"><div class="ub-dot"></div>1080p & 4K Ultra HD</div>
+            <div class="ub-feat"><div class="ub-dot"></div>Cast to TV</div>
+            <div class="ub-feat"><div class="ub-dot"></div>No ads</div>
+            <div class="ub-feat"><div class="ub-dot"></div>Downloads</div>
+            <div class="ub-feat"><div class="ub-dot"></div>10% off merch</div>
+          </div>
+        </div>
+        <div class="ub-cta">
+          <div class="ub-price"><span id="up-sym">R</span><span id="up-val">149</span></div>
+          <div class="ub-period">per month · 14-day free trial</div>
+          <button class="btn-gold" onclick="showPage('pricing')">Start Free Trial</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MERCH ══ -->
+    <div id="page-merch" class="page">
+      <div class="merch-hero">
+        <div class="merch-title">SEI Store</div>
+        <div class="merch-sub">Official team gear · ships Africa-wide · Pro members save 10%</div>
+        <div class="team-tabs" id="team-tabs"></div>
+      </div>
+      <div class="mfilters">
+        <div class="fpill active" onclick="filterMerch('all',this)">All</div>
+        <div class="fpill" onclick="filterMerch('jersey',this)">Jerseys</div>
+        <div class="fpill" onclick="filterMerch('hat',this)">Headwear</div>
+        <div class="fpill" onclick="filterMerch('accessory',this)">Accessories</div>
+      </div>
+      <div class="mgrid-wrap"><div class="mgrid" id="mgrid"></div></div>
+    </div>
+
+    <!-- ══ PRICING ══ -->
+    <div id="page-pricing" class="page">
+      <div class="pricing-wrap">
+        <div class="pricing-head">
+          <h2>Choose Your Plan</h2>
+          <p>Every match. Every sport. Across Africa and the world.</p>
+          <div class="curr-note" id="pricing-note">🇿🇦 Prices in ZAR · South Africa</div>
+        </div>
+        <div class="plans-grid">
+          <div class="plan">
+            <div class="plan-tier">Free</div>
+            <div class="plan-price"><sup>R</sup>0</div>
+            <div class="plan-per">forever free</div>
+            <div class="plan-div"></div>
+            <ul class="plan-feats">
+              <li class="pf"><span class="pfy">✓</span>All live channels</li>
+              <li class="pf"><span class="pfy">✓</span>720p stream quality</li>
+              <li class="pf"><span class="pfy">✓</span>Your region's sports</li>
+              <li class="pf"><span class="pfy">✓</span>Match highlights</li>
+              <li class="pf"><span class="pfn">✗</span><span style="color:var(--t3)">HD / 4K quality</span></li>
+              <li class="pf"><span class="pfn">✗</span><span style="color:var(--t3)">Cast to TV</span></li>
+              <li class="pf"><span class="pfn">✗</span><span style="color:var(--t3)">Downloads</span></li>
+              <li class="pf"><span class="pfn">✗</span><span style="color:var(--t3)">Ad-free</span></li>
+            </ul>
+            <button class="plan-btn outline">Current Plan</button>
+          </div>
+          <div class="plan feat">
+            <div class="plan-tier" style="color:var(--gold)">Pro</div>
+            <div class="plan-price"><sup id="pp-sym">R</sup><span id="pp-val">149</span></div>
+            <div class="plan-per">per month · 14-day free trial</div>
+            <div class="plan-div"></div>
+            <ul class="plan-feats">
+              <li class="pf"><span class="pfy">✓</span>All live channels</li>
+              <li class="pf"><span class="pfy">✓</span>1080p Full HD</li>
+              <li class="pf"><span class="pfy">✓</span>All regions unlocked</li>
+              <li class="pf"><span class="pfy">✓</span>Cast to TV</li>
+              <li class="pf"><span class="pfy">✓</span>Offline downloads</li>
+              <li class="pf"><span class="pfy">✓</span>No ads</li>
+              <li class="pf"><span class="pfy">✓</span>10% off merch</li>
+              <li class="pf"><span class="pfy">✓</span>2 screens</li>
+            </ul>
+            <button class="plan-btn primary">Start Free Trial</button>
+          </div>
+          <div class="plan">
+            <div class="plan-tier" style="color:#C9941A">Elite</div>
+            <div class="plan-price"><sup id="pe-sym">R</sup><span id="pe-val">299</span></div>
+            <div class="plan-per">per month</div>
+            <div class="plan-div"></div>
+            <ul class="plan-feats">
+              <li class="pf"><span class="pfy">✓</span>Everything in Pro</li>
+              <li class="pf"><span class="pfy">✓</span>4K Ultra HD + Dolby</li>
+              <li class="pf"><span class="pfy">✓</span>6 screens</li>
+              <li class="pf"><span class="pfy">✓</span>PPV events included</li>
+              <li class="pf"><span class="pfy">✓</span>20% off merch</li>
+              <li class="pf"><span class="pfy">✓</span>VIP tickets (quarterly)</li>
+              <li class="pf"><span class="pfy">✓</span>Priority support</li>
+              <li class="pf"><span class="pfy">✓</span>Early access premieres</li>
+            </ul>
+            <button class="plan-btn goldbtn">Go Elite</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PROFILE ══ -->
+    <div id="page-profile" class="page">
+      <div class="profile-wrap">
+        <div class="profile-card">
+          <div class="prof-header">
+            <div class="prof-avatar" id="prof-av">JD</div>
+            <div>
+              <div class="prof-name" id="prof-name">John Doe</div>
+              <div class="prof-email" id="prof-email">john@example.com</div>
+              <div class="prof-plan-row">
+                <div class="prof-plan-badge">Free Plan</div>
+                <span style="font-size:11px;color:var(--gold);cursor:pointer" onclick="showPage('pricing')">Upgrade →</span>
+              </div>
+              <div class="prof-region-row"><span id="prof-region-flag">🇿🇦</span><span id="prof-region-name">South Africa</span></div>
+            </div>
+          </div>
+          <div class="prof-card-title">Stats</div>
+          <div class="prof-stat-row">
+            <div class="prof-stat"><div class="prof-stat-val">47</div><div class="prof-stat-lbl">Matches</div></div>
+            <div class="prof-stat"><div class="prof-stat-val">12</div><div class="prof-stat-lbl">Saved</div></div>
+            <div class="prof-stat"><div class="prof-stat-val">3</div><div class="prof-stat-lbl">Orders</div></div>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="prof-card-title">Watchlist</div>
+          <div class="watchlist-row">
+            <div class="wl-item"><div class="wl-thumb" style="background:linear-gradient(135deg,#001808,#002814)"><div class="wl-art">PSL</div></div><div class="wl-info"><div class="wl-name">PSL Matchday 29</div><div class="wl-sport">Football</div></div></div>
+            <div class="wl-item"><div class="wl-thumb" style="background:linear-gradient(135deg,#001030,#001848)"><div class="wl-art">URC</div></div><div class="wl-info"><div class="wl-name">Bulls vs Lions</div><div class="wl-sport">Rugby</div></div></div>
+            <div class="wl-item"><div class="wl-thumb" style="background:linear-gradient(135deg,#0A0A00,#181800)"><div class="wl-art">CSK</div></div><div class="wl-info"><div class="wl-name">Proteas T20</div><div class="wl-sport">Cricket</div></div></div>
+            <div class="wl-item"><div class="wl-thumb" style="background:linear-gradient(135deg,#001028,#001838)"><div class="wl-art">UCL</div></div><div class="wl-info"><div class="wl-name">UCL Semi-Final</div><div class="wl-sport">Football</div></div></div>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="prof-card-title">Settings</div>
+          <div class="prof-setting-row"><div class="psr-left">Notifications</div><div class="psr-right">On ›</div></div>
+          <div class="prof-setting-row"><div class="psr-left">Stream Quality</div><div class="psr-right">720p (Free) ›</div></div>
+          <div class="prof-setting-row"><div class="psr-left">Region</div><div class="psr-right" id="psr-region">South Africa ›</div></div>
+          <div class="prof-setting-row"><div class="psr-left">Language</div><div class="psr-right">English ›</div></div>
+          <div class="prof-setting-row"><div class="psr-left">Connected Devices</div><div class="psr-right">2 ›</div></div>
+        </div>
+
+        <button class="btn-signout" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV (Mobile) -->
+  <div class="bottom-nav">
+    <button class="bn-item active" id="bn-home" onclick="showPage('home')"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></button>
+    <button class="bn-item" id="bn-search" onclick="openSearch()"><div class="bn-icon">🔍</div><div class="bn-label">Search</div></button>
+    <button class="bn-item" id="bn-merch" onclick="showPage('merch')"><div class="bn-icon">🛍️</div><div class="bn-label">Merch</div></button>
+    <button class="bn-item" id="bn-pricing" onclick="showPage('pricing')"><div class="bn-icon">⭐</div><div class="bn-label">Plans</div></button>
+    <button class="bn-item" id="bn-profile" onclick="showPage('profile')"><div class="bn-icon">👤</div><div class="bn-label">Profile</div></button>
+  </div>
+
+</div><!-- #app -->
+
+<!-- ════════════════════════════════════
+     SEARCH OVERLAY
+════════════════════════════════════ -->
+<div id="search-overlay">
+  <div class="search-top">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search-input" placeholder="Search matches, teams, sports…" oninput="doSearch(this.value)" autocomplete="off">
+    </div>
+    <div class="search-close" onclick="closeSearch()">Cancel</div>
+  </div>
+  <div class="search-shortcuts">
+    <div class="ss-label">Browse by sport</div>
+    <div class="ss-pills" id="ss-pills"></div>
+  </div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     VIDEO PLAYER OVERLAY
+════════════════════════════════════ -->
+<div id="player-overlay">
+  <div class="player-area" onclick="togglePlayPause()">
+    <div class="player-fake-video">
+      <div class="player-field">
+        <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" fill="none">
+          <rect x="0" y="0" width="800" height="500" fill="#001A08"/>
+          <ellipse cx="400" cy="250" rx="380" ry="240" stroke="white" stroke-width="2" fill="none"/>
+          <ellipse cx="400" cy="250" rx="300" ry="190" stroke="white" stroke-width="1.5" fill="none"/>
+          <ellipse cx="400" cy="250" rx="200" ry="130" stroke="white" stroke-width="1" fill="none"/>
+          <ellipse cx="400" cy="250" rx="100" ry="65" stroke="white" stroke-width="1" fill="none"/>
+          <line x1="0" y1="250" x2="800" y2="250" stroke="white" stroke-width="1.5"/>
+          <line x1="400" y1="0" x2="400" y2="500" stroke="white" stroke-width="1"/>
+          <rect x="140" y="170" width="200" height="160" stroke="white" stroke-width="1.5" fill="none"/>
+          <rect x="140" y="205" width="80" height="90" stroke="white" stroke-width="1" fill="none"/>
+          <rect x="460" y="170" width="200" height="160" stroke="white" stroke-width="1.5" fill="none"/>
+          <rect x="680" y="205" width="80" height="90" stroke="white" stroke-width="1" fill="none"/>
+          <circle cx="400" cy="250" r="24" stroke="white" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="player-center-overlay">
+        <div class="player-live-badge"><div class="live-dot"></div>LIVE</div>
+        <div class="player-score-big" id="player-score">2 — 0</div>
+        <div class="player-teams" id="player-teams">SUNDOWNS · PIRATES</div>
+      </div>
+    </div>
+    <div class="player-top">
+      <div class="pt-left" id="player-match-label">PSL · Loftus Versfeld · 68'</div>
+      <div class="pt-right">
+        <button class="player-icon-btn">📺</button>
+        <button class="player-icon-btn">⛶</button>
+        <button class="player-icon-btn" onclick="closePlayer(event)">✕</button>
+      </div>
+    </div>
+  </div>
+  <div class="player-controls">
+    <div class="pc-row1">
+      <span class="pc-time">68:14</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="pc-time">90:00</span>
+    </div>
+    <div class="pc-row2">
+      <button class="pc-btn big" id="play-btn" onclick="event.stopPropagation();togglePlayPause()">⏸</button>
+      <button class="pc-btn" onclick="event.stopPropagation()">⏭</button>
+      <div class="vol-slider"><div class="vol-fill"></div></div>
+      <span class="pc-time" style="margin-left:4px">🔊</span>
+      <div class="pc-spacer"></div>
+      <button class="quality-btn" id="quality-btn" onclick="event.stopPropagation();toggleQuality()">720p</button>
+      <button class="quality-btn quality-lock" onclick="event.stopPropagation();showPage('pricing');closePlayer()">1080p 🔒</button>
+      <button class="quality-btn quality-lock" onclick="event.stopPropagation();showPage('pricing');closePlayer()">4K 🔒</button>
+      <div class="pc-viewers" id="player-viewers">👁 82K watching</div>
+    </div>
+  </div>
+</div>
+
+<!-- CART TOAST -->
+<div class="toast" id="toast">
+  <div style="font-size:20px">🛒</div>
+  <div class="toast-text">
+    <div class="toast-label">Cart</div>
+    <div class="toast-count" id="cart-count">0 items</div>
+  </div>
+  <button class="btn-co">Checkout</button>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+
+<!-- DEMO HELPER (Desktop only) -->
+<div id="demo-helper" style="position:fixed;bottom:20px;left:20px;background:rgba(0,0,0,0.85);border:1px solid rgba(212,137,26,0.3);border-radius:10px;padding:12px 16px;font-size:11px;color:rgba(255,255,255,0.7);z-index:999;backdrop-filter:blur(8px);max-width:200px;line-height:1.6;display:none">
+  <div style="color:#D4891A;font-weight:700;margin-bottom:6px">💡 DEMO SHORTCUTS</div>
+  <div>⌘K – Search</div>
+  <div>⌘1 – Home</div>
+  <div>⌘2 – Merch</div>
+  <div>⌘3 – Plans</div>
+  <div>⌘4 – Profile</div>
+  <div style="color:#666;font-size:10px;margin-top:6px">ESC – Close menus</div>
+</div>
+
+<script>
+if(window.innerWidth >= 768) document.getElementById('demo-helper').style.display = 'block';
+</script>
+</body>
+</html>
