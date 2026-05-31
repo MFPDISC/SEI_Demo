@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEI — Sport Entertainment International</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --c-bg:       #080A10;
+  --c-surface:  #0E1118;
+  --c-card:     #131720;
+  --c-lift:     #1A1F2E;
+  --c-red:      #E50914;
+  --c-red-dim:  rgba(229,9,20,.15);
+  --c-gold:     #F5A623;
+  --c-white:    #FFFFFF;
+  --c-g1:       rgba(255,255,255,.85);
+  --c-g2:       rgba(255,255,255,.45);
+  --c-g3:       rgba(255,255,255,.18);
+  --c-g4:       rgba(255,255,255,.07);
+  --c-border:   rgba(255,255,255,.06);
+  --r-sm:       8px;
+  --r-md:       12px;
+  --r-lg:       16px;
+  --r-xl:       24px;
+  --nav-h:      68px;
+  --transition: .22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ─── RESET ───────────────────────────────────────────────── */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--c-bg);
+  color: var(--c-g1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input  { font-family: inherit; }
+ul     { list-style: none; }
+a      { text-decoration: none; color: inherit; }
+
+/* ─── UTILITY ─────────────────────────────────────────────── */
+.sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+.caps { font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+
+/* ══════════════════════════════════════════════════════════════
+   AUTH OVERLAY
+══════════════════════════════════════════════════════════════ */
+#auth {
+  position: fixed; inset:0; z-index:9000;
+  display: flex; align-items:center; justify-content:center;
+  padding: 24px;
+  background: radial-gradient(ellipse 140% 100% at 50% 0%, #1a0a0e 0%, var(--c-bg) 60%);
+}
+
+.auth__bg {
+  position:absolute; inset:0; overflow:hidden; pointer-events:none;
+}
+.auth__bg::before {
+  content:'';
+  position:absolute; top:-20%; left:50%; transform:translateX(-50%);
+  width:900px; height:500px;
+  background: radial-gradient(ellipse, rgba(229,9,20,.18) 0%, transparent 70%);
+  filter:blur(60px);
+}
+
+.auth__box {
+  position:relative; z-index:2;
+  width:100%; max-width:440px;
+}
+
+.auth__logo {
+  text-align:center; margin-bottom:44px;
+}
+.auth__logo-mark {
+  font-family:'Rajdhani',sans-serif;
+  font-size:56px; font-weight:700;
+  letter-spacing:-.02em;
+  color:var(--c-red);
+  line-height:1;
+  display:block;
+}
+.auth__logo-sub {
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--c-g3); font-weight:500; margin-top:4px;
+}
+
+.auth__card {
+  background: rgba(14,17,24,.75);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--c-border);
+  border-radius:var(--r-xl);
+  padding: 40px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+}
+
+.auth__demo-strip {
+  display:flex; align-items:center; gap:10px;
+  background: rgba(245,166,35,.08);
+  border: 1px solid rgba(245,166,35,.2);
+  border-radius:var(--r-sm);
+  padding: 11px 14px;
+  margin-bottom: 28px;
+  font-size:13px; color:rgba(245,166,35,.85);
+}
+.auth__demo-strip svg { flex-shrink:0; }
+
+.auth__tabs {
+  display:flex; gap:0;
+  background: rgba(0,0,0,.35);
+  border-radius:var(--r-sm);
+  padding:3px; margin-bottom:28px;
+}
+.auth__tab {
+  flex:1; padding:9px 0;
+  text-align:center;
+  font-size:13px; font-weight:600;
+  color:var(--c-g3);
+  border-radius:6px;
+  transition:var(--transition);
+}
+.auth__tab:hover { color:var(--c-g2); }
+.auth__tab.is-active { background:var(--c-lift); color:var(--c-white); }
+
+.auth__field { margin-bottom:16px; }
+.auth__label {
+  display:block;
+  font-size:11px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--c-g3); margin-bottom:7px;
+}
+.auth__input {
+  width:100%; background:rgba(0,0,0,.4);
+  border:1px solid var(--c-border); border-radius:var(--r-sm);
+  padding:12px 14px; font-size:15px; color:var(--c-white);
+  transition:var(--transition);
+}
+.auth__input::placeholder { color:var(--c-g3); }
+.auth__input:focus { outline:none; border-color:var(--c-red); box-shadow:0 0 0 3px var(--c-red-dim); }
+
+.auth__submit {
+  width:100%; padding:13px;
+  background:var(--c-red); border-radius:var(--r-sm);
+  color:#fff; font-size:14px; font-weight:600;
+  letter-spacing:.04em;
+  margin-top:8px;
+  transition:var(--transition);
+  position:relative; overflow:hidden;
+}
+.auth__submit::after {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);
+  opacity:0; transition:opacity .2s;
+}
+.auth__submit:hover { background:#cc0812; }
+.auth__submit:hover::after { opacity:1; }
+.auth__submit:active { transform:scale(.99); }
+
+/* ══════════════════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════════════════ */
+#nav {
+  position:fixed; top:0; left:0; right:0;
+  height:var(--nav-h); z-index:200;
+  display:flex; align-items:center;
+  padding:0 32px; gap:40px;
+  background:linear-gradient(to bottom,rgba(8,10,16,.98),rgba(8,10,16,.85));
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--c-border);
+}
+
+.nav__brand {
+  font-family:'Rajdhani',sans-serif;
+  font-size:28px; font-weight:700;
+  color:var(--c-red); letter-spacing:-.02em;
+  flex-shrink:0; cursor:pointer;
+}
+
+.nav__links {
+  display:flex; gap:28px; flex:1;
+}
+@media(max-width:900px){ .nav__links { display:none; } }
+
+.nav__link {
+  font-size:13px; font-weight:500;
+  color:var(--c-g2);
+  transition:color var(--transition);
+  cursor:pointer; padding:4px 0;
+  border-bottom:2px solid transparent;
+}
+.nav__link:hover { color:var(--c-g1); }
+.nav__link.is-active { color:var(--c-white); border-bottom-color:var(--c-red); }
+
+.nav__right {
+  display:flex; align-items:center; gap:12px; margin-left:auto;
+}
+
+.nav__region {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 13px;
+  background:var(--c-g4);
+  border:1px solid var(--c-border);
+  border-radius:var(--r-sm);
+  font-size:13px; font-weight:500; color:var(--c-g2);
+  cursor:pointer; transition:var(--transition);
+}
+.nav__region:hover { border-color:var(--c-g3); color:var(--c-g1); }
+
+.nav__upgrade {
+  padding:8px 20px;
+  background:var(--c-red);
+  border-radius:var(--r-sm);
+  font-size:12px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  color:#fff;
+  transition:var(--transition);
+}
+.nav__upgrade:hover { background:#cc0812; }
+
+.nav__avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,var(--c-red),#8B1428);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700;
+  cursor:pointer; flex-shrink:0;
+}
+
+/* Region dropdown */
+.region-panel {
+  position:absolute; top:calc(var(--nav-h) + 8px); right:32px;
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:var(--r-md);
+  padding:8px; min-width:200px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  display:none;
+  z-index:300;
+}
+.region-panel.is-open { display:block; }
+.region-opt {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:var(--r-sm);
+  font-size:14px; font-weight:500; color:var(--c-g2);
+  cursor:pointer; transition:var(--transition);
+}
+.region-opt:hover { background:var(--c-g4); color:var(--c-white); }
+.region-opt.is-active { color:var(--c-white); background:var(--c-red-dim); }
+
+/* ══════════════════════════════════════════════════════════════
+   PAGES
+══════════════════════════════════════════════════════════════ */
+#app {
+  padding-top:var(--nav-h);
+  display:none;
+}
+.page { display:none; }
+.page.is-active {
+  display:block;
+  animation:pageFade .3s ease;
+}
+@keyframes pageFade {
+  from { opacity:0; transform:translateY(6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─── HERO ────────────────────────────────────────────────── */
+.hero {
+  position:relative; overflow:hidden;
+  height:540px;
+  display:flex; align-items:flex-end;
+  padding:0 48px 52px;
+}
+.hero__backdrop {
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, #1a0a0e 0%, #0d1020 50%, #0a1225 100%);
+}
+.hero__glow {
+  position:absolute; top:-10%; right:-5%;
+  width:600px; height:600px;
+  background:radial-gradient(circle, rgba(229,9,20,.25) 0%, transparent 65%);
+  filter:blur(50px); pointer-events:none;
+}
+.hero__overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(8,10,16,1) 0%, rgba(8,10,16,.4) 50%, transparent 100%);
+}
+.hero__content { position:relative; z-index:2; max-width:680px; }
+.hero__kicker {
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--c-red);
+  margin-bottom:14px;
+}
+.hero__title {
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(36px,5vw,58px);
+  font-weight:700; line-height:1.05;
+  letter-spacing:-.02em;
+  color:var(--c-white);
+  margin-bottom:16px;
+}
+.hero__desc {
+  font-size:16px; font-weight:300;
+  color:var(--c-g2); line-height:1.65;
+  margin-bottom:28px; max-width:500px;
+}
+.hero__actions { display:flex; gap:12px; flex-wrap:wrap; }
+
+.btn-primary {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 28px;
+  background:var(--c-red);
+  border-radius:var(--r-sm);
+  font-size:14px; font-weight:600;
+  color:#fff;
+  transition:var(--transition);
+}
+.btn-primary:hover { background:#cc0812; transform:translateY(-2px); }
+.btn-primary:active { transform:translateY(0); }
+
+.btn-ghost {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 24px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--r-sm);
+  font-size:14px; font-weight:500;
+  color:var(--c-g1);
+  transition:var(--transition);
+  backdrop-filter:blur(8px);
+}
+.btn-ghost:hover { background:rgba(255,255,255,.15); }
+
+/* ─── SECTIONS ────────────────────────────────────────────── */
+.section { padding:40px 48px; }
+@media(max-width:900px){ .section { padding:32px 20px; } }
+
+.section__head {
+  display:flex; align-items:baseline;
+  justify-content:space-between; margin-bottom:24px;
+}
+.section__label {
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--c-red); margin-bottom:4px;
+}
+.section__title {
+  font-family:'Rajdhani',sans-serif;
+  font-size:26px; font-weight:700;
+  color:var(--c-white); letter-spacing:-.01em;
+}
+.section__all {
+  font-size:13px; font-weight:500; color:var(--c-g3);
+  cursor:pointer; transition:color var(--transition);
+}
+.section__all:hover { color:var(--c-red); }
+
+/* ─── SCROLL ROW ──────────────────────────────────────────── */
+.row {
+  display:flex; gap:16px;
+  overflow-x:auto; padding-bottom:12px;
+  scrollbar-width:none;
+}
+.row::-webkit-scrollbar { display:none; }
+
+/* ─── MATCH CARD ──────────────────────────────────────────── */
+.match-card {
+  flex-shrink:0; width:280px;
+  background:var(--c-card);
+  border:1px solid var(--c-border);
+  border-radius:var(--r-lg);
+  overflow:hidden; cursor:pointer;
+  transition:var(--transition);
+  position:relative;
+}
+.match-card:hover {
+  border-color:rgba(229,9,20,.4);
+  transform:translateY(-6px);
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+}
+
+.match-card__thumb {
+  height:158px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:58px;
+  position:relative;
+  background:var(--c-lift);
+}
+.match-card__thumb::after {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, transparent 50%, rgba(19,23,32,.95) 100%);
+}
+
+.match-card__live {
+  position:absolute; top:12px; left:12px; z-index:2;
+  display:flex; align-items:center; gap:5px;
+  background:var(--c-red); border-radius:4px;
+  padding:4px 9px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:700; letter-spacing:.1em;
+  color:#fff;
+}
+.match-card__live-dot {
+  width:5px; height:5px; border-radius:50%; background:#fff;
+  animation:blink 1.2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+.match-card__viewers {
+  position:absolute; bottom:12px; right:12px; z-index:2;
+  font-size:11px; font-weight:500; color:rgba(255,255,255,.7);
+}
+
+.match-card__body { padding:16px; }
+.match-card__sport {
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--c-red); margin-bottom:6px;
+}
+.match-card__title {
+  font-size:15px; font-weight:600;
+  color:var(--c-white); margin-bottom:4px;
+  line-height:1.3;
+}
+.match-card__meta {
+  font-size:12px; font-weight:400;
+  color:var(--c-g3);
+}
+
+.match-card__score {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:14px; padding-top:14px;
+  border-top:1px solid var(--c-border);
+}
+.match-card__team {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  flex:1;
+}
+.match-card__team-name {
+  font-size:11px; font-weight:500; color:var(--c-g3);
+  text-align:center;
+}
+.match-card__team-score {
+  font-family:'Rajdhani',sans-serif;
+  font-size:28px; font-weight:700; color:var(--c-white);
+}
+.match-card__divider {
+  font-size:11px; font-weight:600; color:var(--c-g3);
+  padding:0 8px;
+}
+.match-card__time {
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:700;
+  letter-spacing:.08em;
+  color:var(--c-gold); text-align:center;
+}
+
+/* ─── CONTENT GRID ────────────────────────────────────────── */
+.content-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:20px;
+}
+.content-card {
+  background:var(--c-card);
+  border:1px solid var(--c-border);
+  border-radius:var(--r-md);
+  overflow:hidden; cursor:pointer;
+  transition:var(--transition);
+}
+.content-card:hover {
+  border-color:rgba(229,9,20,.4);
+  transform:translateY(-5px);
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
+}
+.content-card__img {
+  aspect-ratio:16/9;
+  background:var(--c-lift);
+  display:flex; align-items:center; justify-content:center;
+  font-size:48px;
+  position:relative;
+}
+.content-card__badge {
+  position:absolute; top:8px; right:8px;
+  background:var(--c-red); border-radius:4px;
+  padding:3px 8px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; font-weight:700; letter-spacing:.08em;
+  color:#fff;
+}
+.content-card__body { padding:14px; }
+.content-card__sport {
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--c-red); margin-bottom:4px;
+}
+.content-card__title {
+  font-size:14px; font-weight:600; color:var(--c-white);
+  margin-bottom:4px; line-height:1.3;
+}
+.content-card__meta { font-size:12px; color:var(--c-g3); }
+
+/* ─── MERCH GRID ──────────────────────────────────────────── */
+.merch-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:20px;
+}
+.merch-card {
+  background:var(--c-card);
+  border:1px solid var(--c-border);
+  border-radius:var(--r-md);
+  overflow:hidden; cursor:pointer;
+  transition:var(--transition);
+}
+.merch-card:hover {
+  border-color:rgba(229,9,20,.35);
+  transform:translateY(-5px);
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
+}
+.merch-card__img {
+  aspect-ratio:1;
+  background:var(--c-lift);
+  display:flex; align-items:center; justify-content:center;
+  font-size:64px;
+}
+.merch-card__body { padding:16px; }
+.merch-card__team {
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--c-red); margin-bottom:4px;
+}
+.merch-card__title {
+  font-size:14px; font-weight:600; color:var(--c-white);
+  margin-bottom:10px; line-height:1.3;
+}
+.merch-card__foot {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.merch-card__price {
+  font-family:'Rajdhani',sans-serif;
+  font-size:18px; font-weight:700; color:var(--c-white);
+}
+.merch-card__add {
+  font-size:11px; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--c-red); background:var(--c-red-dim);
+  border:1px solid rgba(229,9,20,.25);
+  border-radius:var(--r-sm); padding:6px 12px;
+  transition:var(--transition);
+}
+.merch-card__add:hover { background:var(--c-red); color:#fff; }
+
+/* ─── PRICING ─────────────────────────────────────────────── */
+.pricing-wrap {
+  max-width:960px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+}
+@media(max-width:800px){ .pricing-wrap { grid-template-columns:1fr; } }
+
+.plan {
+  background:var(--c-card);
+  border:1px solid var(--c-border);
+  border-radius:var(--r-xl); padding:36px 28px;
+  display:flex; flex-direction:column;
+  transition:var(--transition);
+  position:relative;
+}
+.plan:hover { border-color:rgba(229,9,20,.35); transform:translateY(-4px); }
+.plan.is-featured {
+  border-color:var(--c-red);
+  box-shadow:0 0 0 1px var(--c-red), 0 20px 60px rgba(229,9,20,.15);
+}
+
+.plan__badge {
+  position:absolute; top:-13px; left:28px;
+  background:var(--c-red); border-radius:4px;
+  padding:4px 12px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:10px; font-weight:700; letter-spacing:.12em;
+  color:#fff; text-transform:uppercase;
+}
+
+.plan__tier {
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--c-g3); margin-bottom:16px;
+}
+.plan__price {
+  font-family:'Rajdhani',sans-serif;
+  font-size:48px; font-weight:700; line-height:1;
+  color:var(--c-white); margin-bottom:4px;
+}
+.plan__price sup { font-size:22px; vertical-align:super; }
+.plan__period { font-size:13px; color:var(--c-g3); margin-bottom:28px; }
+
+.plan__features {
+  flex:1; display:flex; flex-direction:column; gap:12px;
+  margin-bottom:28px;
+}
+.plan__feat {
+  display:flex; align-items:center; gap:10px;
+  font-size:13px; color:var(--c-g2);
+}
+.plan__feat-check {
+  width:18px; height:18px; flex-shrink:0;
+  border-radius:50%; background:var(--c-red-dim);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; color:var(--c-red);
+}
+
+.plan__btn {
+  width:100%; padding:12px;
+  border-radius:var(--r-sm);
+  font-size:13px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  transition:var(--transition);
+}
+.plan__btn--primary { background:var(--c-red); color:#fff; }
+.plan__btn--primary:hover { background:#cc0812; }
+.plan__btn--outline {
+  background:transparent;
+  border:1px solid var(--c-border); color:var(--c-g2);
+}
+.plan__btn--outline:hover { border-color:var(--c-red); color:var(--c-red); }
+
+/* ─── PROFILE ─────────────────────────────────────────────── */
+.profile-grid {
+  display:grid; grid-template-columns:280px 1fr; gap:24px;
+  max-width:960px;
+}
+@media(max-width:800px){ .profile-grid { grid-template-columns:1fr; } }
+
+.profile-sidebar {
+  background:var(--c-card); border:1px solid var(--c-border);
+  border-radius:var(--r-xl); padding:32px;
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center;
+}
+.profile-avatar {
+  width:80px; height:80px; border-radius:50%;
+  background:linear-gradient(135deg,var(--c-red) 0%,#8B1428 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Rajdhani',sans-serif;
+  font-size:32px; font-weight:700; color:#fff;
+  margin-bottom:16px;
+}
+.profile-name { font-size:18px; font-weight:700; color:var(--c-white); margin-bottom:4px; }
+.profile-email { font-size:13px; color:var(--c-g3); margin-bottom:16px; }
+.profile-plan-tag {
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:5px 12px; border-radius:4px;
+  background:var(--c-red-dim); color:var(--c-red);
+  border:1px solid rgba(229,9,20,.2);
+}
+.profile-main {
+  display:flex; flex-direction:column; gap:16px;
+}
+.profile-card {
+  background:var(--c-card); border:1px solid var(--c-border);
+  border-radius:var(--r-xl); padding:28px;
+}
+.profile-card-title {
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--c-g3); margin-bottom:14px;
+}
+.profile-card-value {
+  font-size:15px; font-weight:500; color:var(--c-g1);
+  margin-bottom:16px;
+}
+.btn-signout {
+  width:100%; padding:11px;
+  border:1px solid var(--c-border); border-radius:var(--r-sm);
+  font-size:13px; font-weight:600; color:var(--c-g2);
+  transition:var(--transition); margin-top:20px;
+}
+.btn-signout:hover { border-color:var(--c-red); color:var(--c-red); }
+
+/* ─── TOAST ───────────────────────────────────────────────── */
+.toast-wrap {
+  position:fixed; top:calc(var(--nav-h) + 12px); right:20px;
+  display:flex; flex-direction:column; gap:8px; z-index:9999;
+}
+.toast {
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-left:3px solid var(--c-red);
+  border-radius:var(--r-sm);
+  padding:14px 18px;
+  font-size:13px; font-weight:500; color:var(--c-g1);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  animation:toastIn .25s ease;
+  max-width:320px;
+}
+@keyframes toastIn {
+  from { transform:translateX(120%); opacity:0; }
+  to   { transform:translateX(0); opacity:1; }
+}
+
+/* ─── BOTTOM NAV ──────────────────────────────────────────── */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  height:66px; z-index:200;
+  background:rgba(14,17,24,.97);
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--c-border);
+  display:none; align-items:stretch;
+}
+@media(max-width:900px){ .bottom-nav { display:flex; } }
+
+.bottom-nav__item {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:4px;
+  cursor:pointer; color:var(--c-g3);
+  font-size:9px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  transition:color var(--transition);
+}
+.bottom-nav__item:hover { color:var(--c-g2); }
+.bottom-nav__item.is-active { color:var(--c-red); }
+.bottom-nav__icon { font-size:20px; line-height:1; }
+</style>
+</head>
+<body>
+
+<!-- ╔═══════════════ AUTH ═══════════════╗ -->
+<div id="auth">
+  <div class="auth__bg"></div>
+  <div class="auth__box">
+
+    <div class="auth__logo">
+      <span class="auth__logo-mark">SEI</span>
+      <span class="auth__logo-sub">Sport Entertainment International</span>
+    </div>
+
+    <div class="auth__card">
+      <div class="auth__demo-strip">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Demo — demo@sei.tv &nbsp;|&nbsp; password123
+      </div>
+
+      <div class="auth__tabs">
+        <button class="auth__tab is-active" onclick="authTab('login',this)">Sign In</button>
+        <button class="auth__tab" onclick="authTab('signup',this)">Create Account</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="auth-login">
+        <div class="auth__field">
+          <label class="auth__label">Email Address</label>
+          <input class="auth__input" type="email" id="l-email" value="demo@sei.tv" placeholder="you@example.com">
+        </div>
+        <div class="auth__field">
+          <label class="auth__label">Password</label>
+          <input class="auth__input" type="password" id="l-pass" value="password123" placeholder="••••••••">
+        </div>
+        <button class="auth__submit" onclick="doLogin()">Sign In</button>
+      </div>
+
+      <!-- SIGNUP -->
+      <div id="auth-signup" style="display:none">
+        <div class="auth__field">
+          <label class="auth__label">Full Name</label>
+          <input class="auth__input" type="text" id="s-name" placeholder="Your Name">
+        </div>
+        <div class="auth__field">
+          <label class="auth__label">Email Address</label>
+          <input class="auth__input" type="email" id="s-email" placeholder="you@example.com">
+        </div>
+        <div class="auth__field">
+          <label class="auth__label">Password</label>
+          <input class="auth__input" type="password" id="s-pass" placeholder="••••••••">
+        </div>
+        <button class="auth__submit" onclick="doSignup()">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔═══════════════ APP ════════════════╗ -->
+<div id="app">
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav__brand" onclick="go('home')">SEI</div>
+    <ul class="nav__links">
+      <li class="nav__link is-active" onclick="go('home')">Home</li>
+      <li class="nav__link" onclick="go('live')">Live</li>
+      <li class="nav__link" onclick="go('shop')">Shop</li>
+      <li class="nav__link" onclick="go('plans')">Plans</li>
+      <li class="nav__link" onclick="go('profile')">Profile</li>
+    </ul>
+    <div class="nav__right">
+      <div class="nav__region" onclick="toggleRegions(event)">
+        <span id="nav-flag">🇿🇦</span>
+        <span id="nav-region">South Africa</span>
+        <span style="color:var(--c-g3);font-size:10px;margin-left:2px">▾</span>
+      </div>
+      <button class="nav__upgrade" onclick="go('plans')">Upgrade</button>
+      <div class="nav__avatar" id="nav-avatar" onclick="go('profile')">D</div>
+    </div>
+  </nav>
+
+  <!-- Region Panel -->
+  <div class="region-panel" id="region-panel">
+    <div class="region-opt is-active" onclick="setRegion('🇿🇦','South Africa',this)">🇿🇦 &nbsp;South Africa</div>
+    <div class="region-opt" onclick="setRegion('🇳🇬','Nigeria',this)">🇳🇬 &nbsp;Nigeria</div>
+    <div class="region-opt" onclick="setRegion('🇬🇭','Ghana',this)">🇬🇭 &nbsp;Ghana</div>
+    <div class="region-opt" onclick="setRegion('🇰🇪','Kenya',this)">🇰🇪 &nbsp;Kenya</div>
+    <div class="region-opt" onclick="setRegion('🌍','Pan-Africa',this)">🌍 &nbsp;Pan-Africa</div>
+    <div class="region-opt" onclick="setRegion('🌐','Global',this)">🌐 &nbsp;Global</div>
+  </div>
+
+  <main>
+
+    <!-- ── HOME ─────────────────────────────── -->
+    <div class="page is-active" id="page-home">
+
+      <div class="hero">
+        <div class="hero__backdrop"></div>
+        <div class="hero__glow"></div>
+        <div class="hero__overlay"></div>
+        <div class="hero__content">
+          <div class="hero__kicker">Live Now · Football</div>
+          <h1 class="hero__title">Mamelodi Sundowns<br>vs Orlando Pirates</h1>
+          <p class="hero__desc">Premier Division title decider. Witness history live in stunning quality.</p>
+          <div class="hero__actions">
+            <button class="btn-primary" onclick="openPlayer(LIVE[0])">
+              <span>▶</span> Watch Now
+            </button>
+            <button class="btn-ghost" onclick="toast('ℹ Match details opened')">
+              More Info
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__head">
+          <div>
+            <div class="section__label">Live Now</div>
+            <div class="section__title">On Air Right Now</div>
+          </div>
+          <span class="section__all" onclick="go('live')">View All →</span>
+        </div>
+        <div class="row" id="live-row">
+          <!-- JS injected -->
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section__head">
+          <div>
+            <div class="section__label">Featured</div>
+            <div class="section__title">Coming Up Today</div>
+          </div>
+        </div>
+        <div class="content-grid" id="upcoming-grid">
+          <!-- JS injected -->
+        </div>
+      </div>
+
+    </div><!-- /home -->
+
+    <!-- ── LIVE ──────────────────────────────── -->
+    <div class="page" id="page-live">
+      <div class="section">
+        <div class="section__label">All Channels</div>
+        <div class="section__title" style="margin-bottom:28px">Live Sports</div>
+        <div class="content-grid" id="live-grid">
+          <!-- JS injected -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SHOP ──────────────────────────────── -->
+    <div class="page" id="page-shop">
+      <div class="section">
+        <div class="section__label">Official Store</div>
+        <div class="section__title" style="margin-bottom:28px">Team Merchandise</div>
+        <div class="merch-grid" id="merch-grid">
+          <!-- JS injected -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PLANS ─────────────────────────────── -->
+    <div class="page" id="page-plans">
+      <div class="section">
+        <div style="text-align:center;margin-bottom:48px">
+          <div class="section__label" style="justify-content:center">Pricing</div>
+          <div class="section__title" style="font-size:36px;margin-top:8px">Choose Your Plan</div>
+          <p style="color:var(--c-g2);margin-top:10px;font-size:15px">Unlock premium sports entertainment</p>
+        </div>
+        <div class="pricing-wrap">
+          <div class="plan">
+            <div class="plan__tier">Starter</div>
+            <div class="plan__price">Free</div>
+            <div class="plan__period">No credit card required</div>
+            <ul class="plan__features">
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>720p HD Streaming</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>Limited Regions</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>Ad-Supported</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>1 Screen</li>
+            </ul>
+            <button class="plan__btn plan__btn--outline" onclick="toast('You are on the Free plan')">Current Plan</button>
+          </div>
+
+          <div class="plan is-featured">
+            <div class="plan__badge">Most Popular</div>
+            <div class="plan__tier">Professional</div>
+            <div class="plan__price"><sup>R</sup>149</div>
+            <div class="plan__period">per month · billed monthly</div>
+            <ul class="plan__features">
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>1080p Full HD</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>All Regions Unlocked</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>Ad-Free Experience</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>2 Simultaneous Screens</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>10% Store Discount</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>Offline Downloads</li>
+            </ul>
+            <button class="plan__btn plan__btn--primary" onclick="upgradePlan('Professional','R149/mo')">Upgrade to Pro</button>
+          </div>
+
+          <div class="plan">
+            <div class="plan__tier">Premium</div>
+            <div class="plan__price"><sup>R</sup>299</div>
+            <div class="plan__period">per month · billed monthly</div>
+            <ul class="plan__features">
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>4K Ultra HD</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>All Regions Priority</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>Ad-Free Experience</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>6 Simultaneous Screens</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>20% Store Discount</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>PPV Events Included</li>
+              <li class="plan__feat"><div class="plan__feat-check">✓</div>Priority Support</li>
+            </ul>
+            <button class="plan__btn plan__btn--primary" onclick="upgradePlan('Premium','R299/mo')">Upgrade to Premium</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ────────────────────────────── -->
+    <div class="page" id="page-profile">
+      <div class="section">
+        <div class="section__label">My Account</div>
+        <div class="section__title" style="margin-bottom:28px">Profile</div>
+        <div class="profile-grid">
+          <div class="profile-sidebar">
+            <div class="profile-avatar" id="prof-av">D</div>
+            <div class="profile-name" id="prof-name">Demo User</div>
+            <div class="profile-email" id="prof-email">demo@sei.tv</div>
+            <div class="profile-plan-tag" id="prof-plan">Free Plan</div>
+            <button class="btn-signout" onclick="doLogout()">Sign Out</button>
+          </div>
+          <div class="profile-main">
+            <div class="profile-card">
+              <div class="profile-card-title">Subscription</div>
+              <div class="profile-card-value" id="prof-sub">You are on the Free plan. Upgrade to unlock HD streaming and all regions.</div>
+              <button class="plan__btn plan__btn--primary" style="max-width:200px" onclick="go('plans')">View Plans</button>
+            </div>
+            <div class="profile-card">
+              <div class="profile-card-title">Streaming Quality</div>
+              <div class="profile-card-value" id="prof-quality">720p HD (Free tier)</div>
+            </div>
+            <div class="profile-card">
+              <div class="profile-card-title">Region</div>
+              <div class="profile-card-value" id="prof-region">🇿🇦 South Africa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav__item is-active" id="bn-home" onclick="go('home')">
+      <span class="bottom-nav__icon">⚡</span>Home
+    </div>
+    <div class="bottom-nav__item" id="bn-live" onclick="go('live')">
+      <span class="bottom-nav__icon">📺</span>Live
+    </div>
+    <div class="bottom-nav__item" id="bn-shop" onclick="go('shop')">
+      <span class="bottom-nav__icon">🛍️</span>Shop
+    </div>
+    <div class="bottom-nav__item" id="bn-plans" onclick="go('plans')">
+      <span class="bottom-nav__icon">⭐</span>Plans
+    </div>
+    <div class="bottom-nav__item" id="bn-profile" onclick="go('profile')">
+      <span class="bottom-nav__icon">👤</span>Profile
+    </div>
+  </nav>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+/* ─── DATA ─────────────────────────────────────────────────── */
+/*
+  ytId: YouTube video ID used for the embedded stream.
+  For the live demo we use publicly available YouTube live
+  sport/stadium atmosphere streams. Swap any ytId for your
+  own YouTube Live stream ID when you go live on DigitalOcean.
+  Format: https://www.youtube.com/watch?v=<ytId>
+*/
+const LIVE = [
+  {
+    sport:'Football', title:'Sundowns vs Pirates',
+    meta:'Premier Division · 68\'', score:['2','0'],
+    viewers:'127K', emoji:'⚽',
+    ytId:'5qap5aO4i9A',   // lofi hip hop - replace with real match stream
+    channel:'SuperSport Football'
+  },
+  {
+    sport:'Rugby', title:'Bulls vs Sharks',
+    meta:'URC · 52\'', score:['21','14'],
+    viewers:'89K', emoji:'🏉',
+    ytId:'jfKfPfyJRdk',   // lofi hip hop - replace with real match stream
+    channel:'SuperSport Rugby'
+  },
+  {
+    sport:'Cricket', title:'Proteas vs Australia',
+    meta:'T20 · 14.2 Ov', score:['128/4','—'],
+    viewers:'156K', emoji:'🏏',
+    ytId:'4xDzrJKXOOY',   // lofi hip hop - replace with real match stream
+    channel:'SuperSport Cricket'
+  },
+  {
+    sport:'Boxing', title:'SA Heavyweight Title',
+    meta:'Championship · Round 10', score:['—','—'],
+    viewers:'213K', emoji:'🥊',
+    ytId:'DWcJFNfaw9c',   // lofi hip hop - replace with real match stream
+    channel:'SEI Boxing'
+  },
+  {
+    sport:'Basketball', title:'Cape Town Tigers',
+    meta:'ABL · Q4 8\'', score:['67','61'],
+    viewers:'44K', emoji:'🏀',
+    ytId:'rUxyKA_-grg',   // lofi hip hop - replace with real match stream
+    channel:'SEI Basketball'
+  },
+];
+
+const UPCOMING = [
+  { sport:'Football', title:'SuperSport United vs Chiefs', meta:'Kick-off 19:30', badge:'Today', emoji:'⚽' },
+  { sport:'Rugby',    title:'Lions vs Stormers',           meta:'Kick-off 17:00', badge:'Today', emoji:'🏉' },
+  { sport:'Tennis',   title:'SA Open Finals',             meta:'Centre Court 14:00', badge:'Today', emoji:'🎾' },
+  { sport:'Golf',     title:'Joburg Open R3',             meta:'Live Coverage', badge:'Today', emoji:'⛳' },
+];
+
+const MERCH = [
+  { team:'Mamelodi Sundowns', title:'2024/25 Home Jersey', price:'R 680', emoji:'👕' },
+  { team:'Kaizer Chiefs',     title:'Away Kit 2024',       price:'R 650', emoji:'👕' },
+  { team:'Orlando Pirates',   title:'Training Jacket',     price:'R 560', emoji:'🧥' },
+  { team:'SA Rugby',          title:'Springboks Training Tee', price:'R 420', emoji:'👕' },
+  { team:'SEI',               title:'Premium Snapback Cap', price:'R 280', emoji:'🧢' },
+  { team:'SEI',               title:'Stadium Hoodie',       price:'R 450', emoji:'🧥' },
+];
+
+/* ─── RENDER ───────────────────────────────────────────────── */
+function renderLiveRow() {
+  document.getElementById('live-row').innerHTML = LIVE.map((m,i) => `
+    <div class="match-card" onclick="openPlayer(LIVE[${i}])">
+      <div class="match-card__thumb">
+        ${m.emoji}
+        <div class="match-card__live"><div class="match-card__live-dot"></div>LIVE</div>
+        <div class="match-card__viewers">👁 ${m.viewers}</div>
+      </div>
+      <div class="match-card__body">
+        <div class="match-card__sport">${m.sport}</div>
+        <div class="match-card__title">${m.title}</div>
+        <div class="match-card__meta">${m.meta}</div>
+        <div class="match-card__score">
+          <div class="match-card__team">
+            <div class="match-card__team-name">${m.title.split(' vs ')[0]}</div>
+            <div class="match-card__team-score">${m.score[0]}</div>
+          </div>
+          <div>
+            <div class="match-card__divider">vs</div>
+            <div class="match-card__time">${m.meta.split('·')[1]?.trim() || 'LIVE'}</div>
+          </div>
+          <div class="match-card__team">
+            <div class="match-card__team-name">${m.title.split(' vs ')[1] || ''}</div>
+            <div class="match-card__team-score">${m.score[1]}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderUpcoming() {
+  document.getElementById('upcoming-grid').innerHTML = UPCOMING.map(u => `
+    <div class="content-card" onclick="toast('⏰ Reminder set for ${u.title}')">
+      <div class="content-card__img">${u.emoji}<div class="content-card__badge">${u.badge}</div></div>
+      <div class="content-card__body">
+        <div class="content-card__sport">${u.sport}</div>
+        <div class="content-card__title">${u.title}</div>
+        <div class="content-card__meta">${u.meta}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderLiveGrid() {
+  document.getElementById('live-grid').innerHTML = LIVE.map((m,i) => `
+    <div class="content-card" onclick="openPlayer(LIVE[${i}])">
+      <div class="content-card__img">${m.emoji}<div class="content-card__badge">LIVE</div></div>
+      <div class="content-card__body">
+        <div class="content-card__sport">${m.sport}</div>
+        <div class="content-card__title">${m.title}</div>
+        <div class="content-card__meta">${m.meta} · ${m.viewers} watching</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderMerch() {
+  document.getElementById('merch-grid').innerHTML = MERCH.map(item => `
+    <div class="merch-card">
+      <div class="merch-card__img">${item.emoji}</div>
+      <div class="merch-card__body">
+        <div class="merch-card__team">${item.team}</div>
+        <div class="merch-card__title">${item.title}</div>
+        <div class="merch-card__foot">
+          <div class="merch-card__price">${item.price}</div>
+          <button class="merch-card__add" onclick="event.stopPropagation();toast('🛍️ ${item.title} added to cart')">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ─── STATE ────────────────────────────────────────────────── */
+let user = null;
+
+/* ─── AUTH ─────────────────────────────────────────────────── */
+function authTab(which, btn) {
+  document.querySelectorAll('.auth__tab').forEach(t => t.classList.remove('is-active'));
+  btn.classList.add('is-active');
+  document.getElementById('auth-login').style.display  = which === 'login'  ? '' : 'none';
+  document.getElementById('auth-signup').style.display = which === 'signup' ? '' : 'none';
+}
+
+function doLogin() {
+  const email = document.getElementById('l-email').value.trim() || 'demo@sei.tv';
+  const name  = email.split('@')[0];
+  user = { name, email, plan:'Free' };
+  launch();
+}
+
+function doSignup() {
+  const name  = document.getElementById('s-name').value.trim()  || 'User';
+  const email = document.getElementById('s-email').value.trim() || 'user@sei.tv';
+  user = { name, email, plan:'Free' };
+  launch();
+}
+
+function doLogout() {
+  user = null;
+  document.getElementById('app').style.display  = 'none';
+  document.getElementById('auth').style.display = 'flex';
+}
+
+function launch() {
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('app').style.display  = 'block';
+  const initials = user.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('nav-avatar').textContent = initials;
+  document.getElementById('prof-av').textContent    = initials;
+  document.getElementById('prof-name').textContent  = user.name;
+  document.getElementById('prof-email').textContent = user.email;
+  renderLiveRow();
+  renderUpcoming();
+  renderLiveGrid();
+  renderMerch();
+  toast('Welcome to SEI — streaming live now');
+}
+
+/* ─── NAV ──────────────────────────────────────────────────── */
+function go(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('is-active'));
+  document.getElementById(`page-${page}`).classList.add('is-active');
+
+  document.querySelectorAll('.nav__link').forEach(l => l.classList.remove('is-active'));
+  const links = document.querySelectorAll('.nav__link');
+  const pages = ['home','live','shop','plans','profile'];
+  const idx   = pages.indexOf(page);
+  if (idx >= 0 && links[idx]) links[idx].classList.add('is-active');
+
+  document.querySelectorAll('.bottom-nav__item').forEach(i => i.classList.remove('is-active'));
+  const bn = document.getElementById(`bn-${page}`);
+  if (bn) bn.classList.add('is-active');
+
+  window.scrollTo({ top:0, behavior:'smooth' });
+  closeRegions();
+}
+
+/* ─── REGIONS ──────────────────────────────────────────────── */
+function toggleRegions(e) {
+  e.stopPropagation();
+  document.getElementById('region-panel').classList.toggle('is-open');
+}
+function closeRegions() {
+  document.getElementById('region-panel').classList.remove('is-open');
+}
+document.addEventListener('click', closeRegions);
+
+function setRegion(flag, name, el) {
+  document.getElementById('nav-flag').textContent   = flag;
+  document.getElementById('nav-region').textContent = name;
+  document.getElementById('prof-region').textContent = `${flag} ${name}`;
+  document.querySelectorAll('.region-opt').forEach(o => o.classList.remove('is-active'));
+  el.classList.add('is-active');
+  closeRegions();
+  toast(`Region switched to ${name}`);
+}
+
+/* ─── PLAN ─────────────────────────────────────────────────── */
+function upgradePlan(label, price) {
+  user.plan = label;
+  document.getElementById('prof-plan').textContent  = `${label} Plan`;
+  document.getElementById('prof-sub').textContent   = `You are on the ${label} plan (${price}). Enjoy premium sports entertainment.`;
+  document.getElementById('prof-quality').textContent = label === 'Premium' ? '4K Ultra HD' : '1080p Full HD';
+  toast(`✓ Upgraded to ${label} — enjoy premium streaming!`);
+}
+
+/* ─── TOAST ───────────────────────────────────────────────── */
+function toast(msg) {
+  const wrap = document.getElementById('toasts');
+  const el   = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+/* ─── YOUTUBE PLAYER ──────────────────────────────────────── */
+/*
+  YouTube IFrame API integration.
+  When you go live on DigitalOcean, replace any ytId in the
+  LIVE array above with your own YouTube Live stream ID.
+  The player embeds it full-screen inside SEI's branded shell.
+*/
+
+let ytPlayer      = null;   // YouTube IFrame API player instance
+let ytReady       = false;  // API loaded flag
+let currentMatch  = null;   // Currently open match object
+let controlsTimer = null;   // Auto-hide controls timer
+
+// Load YouTube IFrame API once
+(function loadYTScript() {
+  if (document.getElementById('yt-api-script')) return;
+  const s = document.createElement('script');
+  s.id  = 'yt-api-script';
+  s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+})();
+
+// Called automatically by YouTube API when ready
+window.onYouTubeIframeAPIReady = function () {
+  ytReady = true;
+};
+
+/* Open the player overlay with a specific match */
+function openPlayer(match) {
+  currentMatch = match;
+  document.body.style.overflow = 'hidden';
+
+  // Populate scoreboard & meta
+  document.getElementById('pl-title').textContent    = match.title;
+  document.getElementById('pl-sport').textContent    = match.sport;
+  document.getElementById('pl-time').textContent     = match.meta.split('·')[1]?.trim() || 'LIVE';
+  document.getElementById('pl-viewers').textContent  = match.viewers + ' watching';
+  document.getElementById('pl-score-a').textContent  = match.score[0];
+  document.getElementById('pl-score-b').textContent  = match.score[1];
+  document.getElementById('pl-team-a').textContent   = match.title.split(' vs ')[0] || match.title;
+  document.getElementById('pl-team-b').textContent   = match.title.split(' vs ')[1] || '';
+  document.getElementById('pl-channel').textContent  = match.channel || 'SEI Live';
+
+  // Show overlay
+  const overlay = document.getElementById('player-overlay');
+  overlay.classList.add('is-open');
+
+  // Destroy previous player if any
+  if (ytPlayer) {
+    try { ytPlayer.destroy(); } catch(e) {}
+    ytPlayer = null;
+  }
+
+  // Small delay so overlay transition completes first
+  setTimeout(() => buildYTPlayer(match.ytId), 300);
+
+  resetControlsTimer();
+}
+
+function buildYTPlayer(videoId) {
+  if (!ytReady) {
+    // API not yet loaded — retry in 500ms
+    setTimeout(() => buildYTPlayer(videoId), 500);
+    return;
+  }
+
+  ytPlayer = new YT.Player('yt-frame', {
+    videoId: videoId,
+    playerVars: {
+      autoplay:        1,
+      controls:        0,   // Hide YouTube controls — we use our own
+      disablekb:       1,
+      fs:              0,
+      iv_load_policy:  3,   // No annotations
+      modestbranding:  1,
+      rel:             0,
+      showinfo:        0,
+      playsinline:     1,
+      cc_load_policy:  0,
+    },
+    events: {
+      onReady:       onYTReady,
+      onStateChange: onYTStateChange,
+      onError:       onYTError,
+    }
+  });
+}
+
+function onYTReady(e) {
+  e.target.setVolume(80);
+  e.target.playVideo();
+  document.getElementById('pl-loading').style.display = 'none';
+  updatePlayIcon(true);
+}
+
+function onYTStateChange(e) {
+  // YT.PlayerState: PLAYING=1, PAUSED=2, BUFFERING=3, ENDED=0
+  if (e.data === YT.PlayerState.PLAYING)   updatePlayIcon(true);
+  if (e.data === YT.PlayerState.PAUSED)    updatePlayIcon(false);
+  if (e.data === YT.PlayerState.BUFFERING) document.getElementById('pl-loading').style.display = 'flex';
+  if (e.data !== YT.PlayerState.BUFFERING) document.getElementById('pl-loading').style.display = 'none';
+}
+
+function onYTError(e) {
+  // Video unavailable (private, region-blocked, etc.)
+  // Show a graceful fallback
+  document.getElementById('pl-loading').style.display = 'none';
+  document.getElementById('pl-fallback').style.display = 'flex';
+}
+
+function updatePlayIcon(isPlaying) {
+  const icon = isPlaying ? '⏸' : '▶';
+  document.getElementById('pl-play-icon').textContent = icon;
+}
+
+/* ── Controls ── */
+function plTogglePlay() {
+  if (!ytPlayer) return;
+  const state = ytPlayer.getPlayerState();
+  if (state === YT.PlayerState.PLAYING) {
+    ytPlayer.pauseVideo();
+  } else {
+    ytPlayer.playVideo();
+  }
+  resetControlsTimer();
+}
+
+function plMute() {
+  if (!ytPlayer) return;
+  ytPlayer.isMuted() ? ytPlayer.unMute() : ytPlayer.mute();
+  document.getElementById('pl-mute-icon').textContent = ytPlayer.isMuted() ? '🔇' : '🔊';
+  resetControlsTimer();
+}
+
+function plSetVolume(val) {
+  if (!ytPlayer) return;
+  ytPlayer.setVolume(parseInt(val));
+  resetControlsTimer();
+}
+
+function plFullscreen() {
+  const el = document.getElementById('player-overlay');
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    el.requestFullscreen?.() || el.webkitRequestFullscreen?.();
+  }
+}
+
+/* Auto-hide controls after 3s of no interaction */
+function resetControlsTimer() {
+  const ctrl = document.getElementById('pl-controls');
+  const top  = document.getElementById('pl-topbar');
+  ctrl.classList.remove('is-hidden');
+  top.classList.remove('is-hidden');
+  clearTimeout(controlsTimer);
+  controlsTimer = setTimeout(() => {
+    ctrl.classList.add('is-hidden');
+    top.classList.add('is-hidden');
+  }, 3000);
+}
+
+function plMouseMove() {
+  resetControlsTimer();
+}
+
+/* Close player */
+function closePlayer() {
+  document.getElementById('player-overlay').classList.remove('is-open');
+  document.getElementById('pl-fallback').style.display = 'none';
+  document.getElementById('pl-loading').style.display  = 'flex';
+  document.body.style.overflow = '';
+  clearTimeout(controlsTimer);
+  if (ytPlayer) {
+    try { ytPlayer.stopVideo(); ytPlayer.destroy(); } catch(e) {}
+    ytPlayer = null;
+  }
+  // Rebuild the iframe placeholder so next open works
+  const wrap = document.getElementById('yt-wrap');
+  wrap.innerHTML = '<div id="yt-frame"></div>';
+}
+
+/* Keyboard shortcuts */
+document.addEventListener('keydown', e => {
+  const open = document.getElementById('player-overlay').classList.contains('is-open');
+  if (!open) return;
+  if (e.key === 'Escape') closePlayer();
+  if (e.key === ' ')      { e.preventDefault(); plTogglePlay(); }
+  if (e.key === 'm')      plMute();
+  if (e.key === 'f')      plFullscreen();
+});
+</script>
+
+<!-- ══════════════════════════════════════════════════════
+     PLAYER OVERLAY
+════════════════════════════════════════════════════════ -->
+<div id="player-overlay" onmousemove="plMouseMove()">
+
+  <!-- YouTube video fills the full background -->
+  <div id="yt-wrap">
+    <div id="yt-frame"></div>
+  </div>
+
+  <!-- Loading spinner -->
+  <div id="pl-loading">
+    <div class="pl-spinner"></div>
+  </div>
+
+  <!-- Fallback if video unavailable -->
+  <div id="pl-fallback">
+    <div class="pl-fallback-inner">
+      <div style="font-size:64px;margin-bottom:16px" id="pl-fallback-emoji">⚽</div>
+      <div class="pl-fallback-title" id="pl-fallback-title">Stream Loading</div>
+      <p class="pl-fallback-sub">Replace the YouTube ID in LIVE[] with your own<br>live stream ID to connect a real feed.</p>
+      <button class="pl-fallback-btn" onclick="closePlayer()">← Back to SEI</button>
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="pl-topbar" id="pl-topbar">
+    <button class="pl-back" onclick="closePlayer()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="pl-topbar-centre">
+      <span class="pl-live-pill"><span class="pl-live-dot"></span>LIVE</span>
+      <span class="pl-viewers" id="pl-viewers">127K watching</span>
+      <span class="pl-channel" id="pl-channel">SEI Live</span>
+    </div>
+    <button class="pl-fs-btn" onclick="plFullscreen()" title="Fullscreen">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+    </button>
+  </div>
+
+  <!-- SCOREBOARD (centre, visible over video) -->
+  <div class="pl-scoreboard">
+    <div class="pl-team pl-team--a">
+      <span class="pl-team-name" id="pl-team-a">Sundowns</span>
+      <span class="pl-team-score" id="pl-score-a">2</span>
+    </div>
+    <div class="pl-mid">
+      <div class="pl-sport-label" id="pl-sport">Football</div>
+      <div class="pl-match-clock" id="pl-time">68'</div>
+    </div>
+    <div class="pl-team pl-team--b">
+      <span class="pl-team-score" id="pl-score-b">0</span>
+      <span class="pl-team-name" id="pl-team-b">Pirates</span>
+    </div>
+  </div>
+
+  <!-- CONTROLS BAR -->
+  <div class="pl-controls" id="pl-controls">
+
+    <!-- play / mute / volume / LIVE tag / title -->
+    <div class="pl-ctrl-row">
+      <div class="pl-ctrl-left">
+        <button class="pl-btn" id="pl-play-icon" onclick="plTogglePlay()">⏸</button>
+        <button class="pl-btn" id="pl-mute-icon" onclick="plMute()">🔊</button>
+        <input
+          type="range" min="0" max="100" value="80"
+          class="pl-vol-slider"
+          oninput="plSetVolume(this.value)"
+          title="Volume"
+        >
+        <span class="pl-live-tag">● LIVE</span>
+        <span class="pl-title-label" id="pl-title">Sundowns vs Pirates</span>
+      </div>
+      <div class="pl-ctrl-right">
+        <span class="pl-qual-badge">HD</span>
+        <button class="pl-btn pl-btn--text" onclick="toast('Subtitles toggled')">CC</button>
+        <button class="pl-btn" onclick="plFullscreen()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
+        <button class="pl-btn" onclick="closePlayer()">✕</button>
+      </div>
+    </div>
+
+    <div class="pl-shortcuts">Space = Play/Pause &nbsp;·&nbsp; M = Mute &nbsp;·&nbsp; F = Fullscreen &nbsp;·&nbsp; Esc = Close</div>
+  </div>
+
+</div><!-- /player-overlay -->
+
+<style>
+/* ══════════ PLAYER ══════════ */
+#player-overlay {
+  position: fixed; inset: 0; z-index: 8000;
+  background: #000;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+#player-overlay.is-open {
+  opacity: 1; pointer-events: all;
+}
+
+/* YouTube iframe fills background */
+#yt-wrap {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+#yt-wrap iframe,
+#yt-frame {
+  position: absolute;
+  /* Oversized to crop YouTube chrome/bars */
+  top: -60px; left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 120px);
+  border: none;
+  pointer-events: none; /* Our controls sit on top */
+}
+
+/* Loading spinner */
+#pl-loading {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.6);
+}
+.pl-spinner {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.15);
+  border-top-color: var(--c-red);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Fallback */
+#pl-fallback {
+  position: absolute; inset: 0; z-index: 4;
+  display: none;
+  align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, #1a0a0e 0%, #000 100%);
+}
+.pl-fallback-inner {
+  text-align: center; padding: 40px;
+  max-width: 500px;
+}
+.pl-fallback-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 28px; font-weight: 700;
+  color: #fff; margin-bottom: 12px;
+}
+.pl-fallback-sub {
+  font-size: 14px; color: rgba(255,255,255,.5);
+  line-height: 1.7; margin-bottom: 28px;
+}
+.pl-fallback-btn {
+  display: inline-block; padding: 11px 24px;
+  background: var(--c-red); border-radius: 6px;
+  color: #fff; font-size: 13px; font-weight: 700;
+  cursor: pointer; border: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Top bar */
+.pl-topbar {
+  position: relative; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  background: linear-gradient(to bottom, rgba(0,0,0,.85) 0%, transparent 100%);
+  transition: opacity .4s ease;
+}
+.pl-topbar.is-hidden { opacity: 0; pointer-events: none; }
+
+.pl-back {
+  display: flex; align-items: center; gap: 7px;
+  color: rgba(255,255,255,.8); font-size: 14px; font-weight: 600;
+  transition: color .2s;
+}
+.pl-back:hover { color: #fff; }
+
+.pl-topbar-centre {
+  display: flex; align-items: center; gap: 14px;
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.pl-live-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--c-red); border-radius: 4px;
+  padding: 4px 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; color: #fff;
+}
+.pl-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #fff;
+  animation: blink 1.2s ease-in-out infinite;
+}
+.pl-viewers {
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,.65);
+}
+.pl-channel {
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,.35);
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.pl-fs-btn {
+  color: rgba(255,255,255,.6); transition: color .2s;
+}
+.pl-fs-btn:hover { color: #fff; }
+
+/* Scoreboard */
+.pl-scoreboard {
+  position: absolute; z-index: 9;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; gap: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 18px 32px;
+  pointer-events: none;
+}
+.pl-team {
+  display: flex; align-items: center; gap: 16px;
+}
+.pl-team--a { flex-direction: row; }
+.pl-team--b { flex-direction: row-reverse; }
+.pl-team-name {
+  font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,.7);
+  max-width: 130px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pl-team-score {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 56px; font-weight: 700; line-height: 1;
+  color: #fff;
+}
+.pl-mid {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 0 24px; flex-shrink: 0;
+}
+.pl-sport-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--c-red);
+}
+.pl-match-clock {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--c-gold);
+}
+
+/* Controls */
+.pl-controls {
+  position: relative; z-index: 10;
+  margin-top: auto;
+  padding: 60px 24px 24px;
+  background: linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 100%);
+  transition: opacity .4s ease;
+}
+.pl-controls.is-hidden { opacity: 0; pointer-events: none; }
+
+.pl-ctrl-row {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 16px;
+  margin-bottom: 10px;
+}
+.pl-ctrl-left, .pl-ctrl-right {
+  display: flex; align-items: center; gap: 14px;
+}
+.pl-btn {
+  color: rgba(255,255,255,.8);
+  font-size: 18px; transition: color .2s;
+  display: flex; align-items: center;
+}
+.pl-btn:hover { color: #fff; }
+.pl-btn--text { font-size: 13px; font-weight: 700; }
+
+.pl-vol-slider {
+  -webkit-appearance: none;
+  width: 90px; height: 3px;
+  background: rgba(255,255,255,.25); border-radius: 2px;
+  cursor: pointer; outline: none;
+}
+.pl-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px; height: 13px; border-radius: 50%; background: #fff;
+  cursor: pointer;
+}
+.pl-live-tag {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em;
+  color: var(--c-red);
+}
+.pl-title-label {
+  font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,.7);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 280px;
+}
+.pl-qual-badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  padding: 3px 8px; border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.7);
+}
+.pl-shortcuts {
+  font-size: 11px; color: rgba(255,255,255,.25);
+  letter-spacing: .04em;
+}
+
+@media (max-width: 600px) {
+  .pl-team-score { font-size: 40px; }
+  .pl-team-name  { font-size: 11px; max-width: 80px; }
+  .pl-mid        { padding: 0 12px; }
+  .pl-vol-slider { width: 60px; }
+  .pl-title-label{ display: none; }
+  .pl-shortcuts  { display: none; }
+  .pl-scoreboard { padding: 12px 16px; }
+}
+</style>
+</body>
+</html>
