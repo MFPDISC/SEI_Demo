@@ -73,7 +73,7 @@ export const Dashboard = ({ user }) => {
             <div className="plans-grid">
               <div className="plan-card">
                 <h3>Free</h3>
-                <div className="price"><span className="amount">$0</span><span className="period">/month</span></div>
+                <div className="price"><span className="amount">R0</span><span className="period">/month</span></div>
                 <p className="plan-description">Perfect for testing</p>
                 <ul className="features-list">
                   <li><span className="check">✓</span> 1 video upload</li>
@@ -85,8 +85,8 @@ export const Dashboard = ({ user }) => {
 
               <div className="plan-card highlighted">
                 <div className="popular-badge">Popular</div>
-                <h3>Professional</h3>
-                <div className="price"><span className="amount">$29</span><span className="period">/month</span></div>
+                <h3>Standard</h3>
+                <div className="price"><span className="amount">R89</span><span className="period">/month</span></div>
                 <p className="plan-description">For content creators</p>
                 <ul className="features-list">
                   <li><span className="check">✓</span> 50 video uploads</li>
@@ -94,12 +94,12 @@ export const Dashboard = ({ user }) => {
                   <li><span className="check">✓</span> Advanced analytics</li>
                   <li><span className="check">✓</span> Priority support</li>
                 </ul>
-                <button className="btn-plan">Upgrade to Pro</button>
+                <button className="btn-plan">Upgrade to Standard</button>
               </div>
 
               <div className="plan-card">
-                <h3>Elite</h3>
-                <div className="price"><span className="amount">$99</span><span className="period">/month</span></div>
+                <h3>Premium</h3>
+                <div className="price"><span className="amount">R179</span><span className="period">/month</span></div>
                 <p className="plan-description">For sports broadcasters</p>
                 <ul className="features-list">
                   <li><span className="check">✓</span> Unlimited uploads</li>
@@ -107,7 +107,7 @@ export const Dashboard = ({ user }) => {
                   <li><span className="check">✓</span> Live streaming</li>
                   <li><span className="check">✓</span> API access</li>
                 </ul>
-                <button className="btn-plan">Upgrade to Elite</button>
+                <button className="btn-plan">Upgrade to Premium</button>
               </div>
             </div>
           </div>
