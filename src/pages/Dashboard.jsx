@@ -83,10 +83,9 @@ export const Dashboard = ({ user }) => {
                 <button className="btn-plan" disabled>Current Plan</button>
               </div>
 
-              <div className="plan-card highlighted">
-                <div className="popular-badge">Popular</div>
+              <div className="plan-card">
                 <h3>Standard</h3>
-                <div className="price"><span className="amount">R89</span><span className="period">/month</span></div>
+                <div className="price"><span className="amount">R29</span><span className="period">/month</span></div>
                 <p className="plan-description">For content creators</p>
                 <ul className="features-list">
                   <li><span className="check">✓</span> 50 video uploads</li>
@@ -97,9 +96,10 @@ export const Dashboard = ({ user }) => {
                 <button className="btn-plan">Upgrade to Standard</button>
               </div>
 
-              <div className="plan-card">
+              <div className="plan-card highlighted">
+                <div className="popular-badge">Popular</div>
                 <h3>Premium</h3>
-                <div className="price"><span className="amount">R179</span><span className="period">/month</span></div>
+                <div className="price"><span className="amount">R89</span><span className="period">/month</span></div>
                 <p className="plan-description">For sports broadcasters</p>
                 <ul className="features-list">
                   <li><span className="check">✓</span> Unlimited uploads</li>
