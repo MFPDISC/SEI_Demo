@@ -15,16 +15,10 @@ export const Dashboard = ({ user }) => {
           Home
         </button>
         <button
-          className={`tab-button ${activeTab === 'videos' ? 'active' : ''}`}
-          onClick={() => setActiveTab('videos')}
+          className={`tab-button ${activeTab === 'watchlist' ? 'active' : ''}`}
+          onClick={() => setActiveTab('watchlist')}
         >
-          My Videos
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'upload' ? 'active' : ''}`}
-          onClick={() => setActiveTab('upload')}
-        >
-          Upload
+          My Watchlist
         </button>
         <button
           className={`tab-button ${activeTab === 'subscription' ? 'active' : ''}`}
@@ -37,33 +31,14 @@ export const Dashboard = ({ user }) => {
       <div className="dashboard-content">
         {activeTab === 'home' && <Home user={user} />}
 
-        {activeTab === 'videos' && (
+        {activeTab === 'watchlist' && (
           <div className="tab-pane">
-            <h2>Your Videos</h2>
+            <h2>My Watchlist</h2>
             <div className="empty-state">
-              <div className="empty-icon">VID</div>
-              <h3>No videos yet</h3>
-              <p>Start by uploading your first sports content</p>
+              <div className="empty-icon">WATCH</div>
+              <h3>Your watchlist is empty</h3>
+              <p>Browse events and add them to your watchlist to watch later</p>
             </div>
-          </div>
-        )}
-
-        {activeTab === 'upload' && (
-          <div className="tab-pane">
-            <h2>Upload Sports Content</h2>
-            <div className="upload-area">
-              <div className="upload-icon">UPLOAD</div>
-              <p className="upload-text">
-                <strong>Click to upload or drag and drop</strong>
-                <br />
-                MP4, MKV, WebM up to 5GB
-              </p>
-            </div>
-            {user.plan === 'free' && (
-              <div className="plan-limit-warning">
-                Free plan: Limited to 1 video. Upgrade to upload more!
-              </div>
-            )}
           </div>
         )}
 
@@ -74,11 +49,11 @@ export const Dashboard = ({ user }) => {
               <div className="plan-card">
                 <h3>Free</h3>
                 <div className="price"><span className="amount">R0</span><span className="period">/month</span></div>
-                <p className="plan-description">Perfect for testing</p>
+                <p className="plan-description">Perfect for casual viewers</p>
                 <ul className="features-list">
-                  <li><span className="check">✓</span> 1 video upload</li>
-                  <li><span className="check">✓</span> Basic streaming</li>
+                  <li><span className="check">✓</span> Access to free content</li>
                   <li><span className="check">✓</span> Standard quality (480p)</li>
+                  <li><span className="check">✓</span> Limited ads</li>
                 </ul>
                 <button className="btn-plan" disabled>Current Plan</button>
               </div>
@@ -86,12 +61,12 @@ export const Dashboard = ({ user }) => {
               <div className="plan-card">
                 <h3>Standard</h3>
                 <div className="price"><span className="amount">R29</span><span className="period">/month</span></div>
-                <p className="plan-description">For content creators</p>
+                <p className="plan-description">For sports enthusiasts</p>
                 <ul className="features-list">
-                  <li><span className="check">✓</span> 50 video uploads</li>
+                  <li><span className="check">✓</span> Access to all content</li>
                   <li><span className="check">✓</span> HD streaming (1080p)</li>
-                  <li><span className="check">✓</span> Advanced analytics</li>
-                  <li><span className="check">✓</span> Priority support</li>
+                  <li><span className="check">✓</span> Ad-free experience</li>
+                  <li><span className="check">✓</span> Watch on 2 devices</li>
                 </ul>
                 <button className="btn-plan">Upgrade to Standard</button>
               </div>
@@ -100,12 +75,12 @@ export const Dashboard = ({ user }) => {
                 <div className="popular-badge">Popular</div>
                 <h3>Premium</h3>
                 <div className="price"><span className="amount">R89</span><span className="period">/month</span></div>
-                <p className="plan-description">For sports broadcasters</p>
+                <p className="plan-description">For ultimate sports fans</p>
                 <ul className="features-list">
-                  <li><span className="check">✓</span> Unlimited uploads</li>
-                  <li><span className="check">✓</span> 4K streaming</li>
-                  <li><span className="check">✓</span> Live streaming</li>
-                  <li><span className="check">✓</span> API access</li>
+                  <li><span className="check">✓</span> Everything in Standard</li>
+                  <li><span className="check">✓</span> 4K Ultra HD streaming</li>
+                  <li><span className="check">✓</span> Watch on 4 devices</li>
+                  <li><span className="check">✓</span> Download for offline viewing</li>
                 </ul>
                 <button className="btn-plan">Upgrade to Premium</button>
               </div>
