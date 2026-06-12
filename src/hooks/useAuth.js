@@ -1,0 +1,127 @@
+import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+
+const API_URL = '/api';
+
+export const useAuth = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('seiToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 > Date.now()) {
+          setIsAuthenticated(true);
+          fetchCurrentUser(token);
+        } else {
+          localStorage.removeItem('seiToken');
+        }
+      } catch (err) {
+        localStorage.removeItem('seiToken');
+      }
+    }
+  }, []);
+
+  const fetchCurrentUser = useCallback(async (token) => {
+    try {
+      const response = await axios.get(`${API_URL}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUser(response.data.user);
+    } catch (err) {
+      console.error('Failed to fetch current user:', err);
+      localStorage.removeItem('seiToken');
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  const register = useCallback(async (email, password, name) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(`${API_URL}/auth/register`, {
+        email,
+        password,
+        name
+      });
+
+      localStorage.setItem('seiToken', response.data.token);
+      setUser(response.data.user);
+      setIsAuthenticated(true);
+
+      return { success: true, user: response.data.user };
+    } catch (err) {
+      const message = err.response?.data?.error || 'Registration failed';
+      setError(message);
+      return { success: false, error: message };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const login = useCallback(async (email, password) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(`${API_URL}/auth/login`, {
+        email,
+        password
+      });
+
+      localStorage.setItem('seiToken', response.data.token);
+      setUser(response.data.user);
+      setIsAuthenticated(true);
+
+      return { success: true, user: response.data.user };
+    } catch (err) {
+      const message = err.response?.data?.error || 'Login failed';
+      setError(message);
+      return { success: false, error: message };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('seiToken');
+    setUser(null);
+    setIsAuthenticated(false);
+    setError(null);
+  }, []);
+
+  const upgradePlan = useCallback(async (plan) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem('seiToken');
+      const response = await axios.post(`${API_URL}/subscriptions/upgrade`, { plan }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setUser(response.data.user);
+      return { success: true, user: response.data.user };
+    } catch (err) {
+      const message = err.response?.data?.error || 'Upgrade failed';
+      setError(message);
+      return { success: false, error: message };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return {
+    user,
+    loading,
+    error,
+    isAuthenticated,
+    register,
+    login,
+    logout,
+    upgradePlan
+  };
+};

@@ -1,0 +1,41 @@
+{
+  "name": "sei-streaming",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SEI - Sport Entertainment International Streaming Platform",
+  "homepage": "https://MFPDISC.github.io/SEI_Demo",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "server": "node backend/server.js",
+    "server:dev": "nodemon backend/server.js",
+    "start": "npm run server",
+    "start:all": "concurrently \"npm run server:dev\" \"npm run dev\""
+  },
+  "dependencies": {
+    "@vimeo/vimeo": "^3.0.3",
+    "axios": "^1.17.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.1.0",
+    "jwt-decode": "^4.0.0",
+    "pg": "^8.21.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tus-js-client": "^4.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.1",
+    "gh-pages": "^6.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "nodemon": "^3.1.14",
+    "vite": "^6.4.3"
+  }
+}
