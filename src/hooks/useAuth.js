@@ -4,6 +4,9 @@ import { jwtDecode } from 'jwt-decode';
 
 const API_URL = '/api';
 
+// Detect if running on GitHub Pages (demo mode)
+const isDemoMode = window.location.hostname.includes('github.io');
+
 export const useAuth = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -11,6 +14,18 @@ export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // If demo mode, auto-login with mock user
+    if (isDemoMode) {
+      setIsAuthenticated(true);
+      setUser({
+        id: 'demo-user',
+        name: 'Demo User',
+        email: 'demo@seimediagroup.co',
+        plan: 'Premium'
+      });
+      return;
+    }
+
     const token = localStorage.getItem('seiToken');
     if (token) {
       try {
@@ -41,6 +56,18 @@ export const useAuth = () => {
   }, []);
 
   const register = useCallback(async (email, password, name) => {
+    // In demo mode, simulate successful registration
+    if (isDemoMode) {
+      setLoading(true);
+      setTimeout(() => {
+        const mockUser = { id: 'demo-user', name, email, plan: 'Free' };
+        setUser(mockUser);
+        setIsAuthenticated(true);
+        setLoading(false);
+      }, 500);
+      return { success: true, user: { name, email, plan: 'Free' } };
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -65,6 +92,18 @@ export const useAuth = () => {
   }, []);
 
   const login = useCallback(async (email, password) => {
+    // In demo mode, simulate successful login
+    if (isDemoMode) {
+      setLoading(true);
+      setTimeout(() => {
+        const mockUser = { id: 'demo-user', name: 'Demo User', email, plan: 'Premium' };
+        setUser(mockUser);
+        setIsAuthenticated(true);
+        setLoading(false);
+      }, 500);
+      return { success: true, user: { name: 'Demo User', email, plan: 'Premium' } };
+    }
+
     setLoading(true);
     setError(null);
     try {

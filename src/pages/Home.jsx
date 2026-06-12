@@ -2,6 +2,81 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/home.css';
 
+// Detect if running on GitHub Pages (demo mode)
+const isDemoMode = window.location.hostname.includes('github.io');
+
+// Mock data for demo mode
+const mockData = {
+  featured: [
+    {
+      id: 1,
+      title: 'South Africa vs England - Rugby Championship',
+      description: 'Live from Ellis Park Stadium, Johannesburg',
+      sport_category: 'Rugby',
+      region: 'Africa',
+      status: 'live',
+      start_time: new Date().toISOString(),
+      thumbnail_url: 'https://images.unsplash.com/photo-1512719994953-eabf50895df7?w=1200'
+    },
+    {
+      id: 2,
+      title: 'Manchester United vs Liverpool - Premier League',
+      description: 'The biggest rivalry in English football',
+      sport_category: 'Football',
+      region: 'UK',
+      status: 'upcoming',
+      start_time: new Date(Date.now() + 86400000).toISOString(),
+      thumbnail_url: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200'
+    },
+    {
+      id: 3,
+      title: 'India vs Australia - Cricket Test Match',
+      description: 'Day 3 of the thrilling test series',
+      sport_category: 'Cricket',
+      region: 'Asia',
+      status: 'live',
+      start_time: new Date().toISOString(),
+      thumbnail_url: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1200'
+    }
+  ],
+  categories: ['Football', 'Rugby', 'Cricket', 'Tennis', 'Athletics', 'Basketball'],
+  regions: ['Africa', 'UK', 'Europe', 'Americas', 'Asia'],
+  liveEvents: [
+    {
+      id: 4,
+      title: 'Springboks vs All Blacks',
+      description: 'Rugby Championship showdown',
+      sport_category: 'Rugby',
+      region: 'Africa'
+    },
+    {
+      id: 5,
+      title: 'Wimbledon Finals',
+      description: 'Men\'s singles championship',
+      sport_category: 'Tennis',
+      region: 'UK'
+    }
+  ],
+  upcomingEvents: [
+    {
+      id: 6,
+      title: 'FA Cup Final',
+      description: 'The pinnacle of English football',
+      sport_category: 'Football',
+      region: 'UK',
+      start_time: new Date(Date.now() + 172800000).toISOString()
+    },
+    {
+      id: 7,
+      title: 'IPL Finals',
+      description: 'Cricket\'s biggest T20 showdown',
+      sport_category: 'Cricket',
+      region: 'Asia',
+      start_time: new Date(Date.now() + 259200000).toISOString()
+    }
+  ]
+};
+
 export const Home = ({ user }) => {
   const [featured, setFeatured] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -14,6 +89,19 @@ export const Home = ({ user }) => {
 
   useEffect(() => {
     const fetchHomeData = async () => {
+      // In demo mode, use mock data
+      if (isDemoMode) {
+        setTimeout(() => {
+          setFeatured(mockData.featured);
+          setCategories(mockData.categories);
+          setRegions(mockData.regions);
+          setLiveEvents(mockData.liveEvents);
+          setUpcomingEvents(mockData.upcomingEvents);
+          setLoading(false);
+        }, 800);
+        return;
+      }
+
       try {
         const [homepage, live, upcoming] = await Promise.all([
           axios.get('/api/homepage'),
